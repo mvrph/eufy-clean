@@ -1,0 +1,18 @@
+# Standalone requirements (no Home Assistant)
+# For using the library directly in Python without Home Assistant
+
+# Core HTTP client for Eufy API
+aiohttp>=3.11.0
+
+# MQTT client for device communication
+paho-mqtt>=2.1.0
+
+# Protobuf message encoding/decoding
+protobuf>=5.29.0
+
+# Environment variable management (optional but recommended)
+python-dotenv>=1.0.0
+
+# Note: These are the ONLY dependencies needed for standalone usage.
+# The requirements.txt file includes Home Assistant dependencies which
+# are NOT needed if you're using this library standalone.

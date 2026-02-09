@@ -17,10 +17,16 @@ class EufyApi:
 
     async def login(self, validate_only: bool = False) -> dict[str, Any]:
         session = await self.eufy_login()
+        if not session:
+            return None
         if validate_only:
             return {'session': session}
         user = await self.get_user_info()
+        if not user:
+            return None
         mqtt = await self.get_mqtt_credentials()
+        if not mqtt:
+            return None
         return {'session': session, 'user': user, 'mqtt': mqtt}
 
     async def eufy_login(self) -> dict[str, Any]:
@@ -53,6 +59,9 @@ class EufyApi:
                 return None
 
     async def get_user_info(self) -> dict[str, Any]:
+        if not self.session or 'access_token' not in self.session:
+            _LOGGER.error('No valid session available. Login must succeed first.')
+            return None
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 'https://api.eufylife.com/v1/user/user_center_info',

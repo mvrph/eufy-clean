@@ -26,10 +26,13 @@ class EufyLogin(Base):
         eufyLogin = await self.eufyApi.login()
 
         if not eufyLogin:
-            raise Exception('Login failed')
+            raise Exception('Login failed - Please check your username and password. Error: Incorrect email login or password.')
 
         if not config['mqtt']:
             raise Exception('MQTT login is required')
+
+        if 'mqtt' not in eufyLogin:
+            raise Exception('Login succeeded but MQTT credentials not available')
 
         self.mqtt_credentials = eufyLogin['mqtt']
 
