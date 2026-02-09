@@ -2,7 +2,18 @@ import asyncio
 import logging
 from typing import Any, Callable
 
-from homeassistant.components.vacuum import VacuumActivity
+# Try to import VacuumActivity from Home Assistant, fallback to string literals for standalone
+try:
+    from homeassistant.components.vacuum import VacuumActivity
+except ImportError:
+    # Standalone mode - use string literals instead
+    class VacuumActivity:
+        IDLE = "idle"
+        CLEANING = "cleaning"
+        DOCKED = "docked"
+        RETURNING = "returning"
+        ERROR = "error"
+        PAUSED = "paused"
 
 from ..constants.devices import EUFY_CLEAN_DEVICES
 from ..constants.state import (EUFY_CLEAN_CLEAN_SPEED, EUFY_CLEAN_CONTROL,
