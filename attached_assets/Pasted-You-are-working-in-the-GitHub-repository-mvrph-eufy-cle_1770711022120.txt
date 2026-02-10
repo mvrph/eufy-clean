@@ -1,0 +1,57 @@
+You are working in the GitHub repository mvrph/eufy-clean, which contains a Home Assistant
+custom integration for controlling Eufy vacuums over MQTT (Robovac X10 Pro Omni).
+
+Goal:
+- Organize and streamline the repository so it is easier to navigate and maintain.
+- Prepare changes as if they will be submitted as a single pull request.
+
+High-level objectives:
+- Make the repo layout more discoverable for new contributors.
+- Ensure configuration, services, and MQTT topics are clearly documented near the code that uses them.
+- Tighten up duplicated or scattered documentation (e.g. README vs docs/*) without losing information.
+
+Constraints:
+- Do not make any behavior-changing edits to the integration logic unless absolutely necessary to fix
+  an obvious bug. Prefer documentation, structure, and naming improvements.
+- Do not change public-facing service names, entity IDs, or configuration options.
+- Keep the Home Assistant integration structure compatible with current versions of Home Assistant.
+- If you are unsure about a behavior change, leave a clear TODO comment instead of changing the code.
+
+Allowed changes:
+- Reorganize folders (e.g. move helpers/utilities into subpackages) as long as imports are updated.
+- Add or update module-level docstrings to explain responsibilities.
+- Improve type hints and inline comments where they clarify behavior.
+- Normalize naming for modules, classes, and functions when it improves clarity but does not
+  change behavior.
+- Add or update documentation (README, TODO, docs/*) to reflect the new structure.
+
+README / docs expectations:
+- Ensure the top-level README reflects the organized layout:
+  - Where to find core integration code.
+  - Where MQTT/topic handling lives.
+  - Where configuration schemas and validation live.
+  - Where tests (if any) live and how to run them.
+- Keep examples and configuration snippets accurate with respect to the current code.
+
+Safety checks:
+- If there are tests or linters configured, run them and fix only clearly non-behavioral issues
+  (e.g. import paths after moving files, obvious typos).
+- Avoid introducing new dependencies unless they are already used elsewhere in your changes.
+
+PR preparation:
+- Think of your final result as a single pull request named something like "Organize eufy-clean layout".
+- At the end of your work, write a concise PR title and body that explain:
+  - What you changed structurally.
+  - Any risk to existing users (should be minimal).
+  - How you verified that the integration still works (tests, manual checks, or reasoning).
+- Output your final answer in the following exact format so it can be parsed by automation:
+  PR_TITLE: <a single-line title for the pull request>
+  PR_BODY:
+  <a multi-line markdown body suitable for a GitHub pull request description>
+
+Steps:
+1. Scan the current repo structure and identify the main entry points for the integration.
+2. Propose a target layout in your own words before making changes.
+3. Apply non-breaking structural and documentation improvements incrementally.
+4. Keep notes of the changes you make so they can be summarized in the PR body.
+5. Finish by emitting PR_TITLE and PR_BODY as described above, and briefly list the key changes.

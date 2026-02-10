@@ -1,47 +1,49 @@
 # Eufy Clean
 
-Home Assistant custom integration for controlling Eufy robot vacuums over MQTT. Built for the **Robovac X10 Pro Omni** but should work with other MQTT-enabled Eufy vacuums.
+Home Assistant custom integration for controlling Eufy robot vacuums over MQTT. Built for the **Robovac X10 Pro Omni**, but compatible with other MQTT-enabled Eufy vacuums. Can also be used as a standalone Python library without Home Assistant.
 
-Originally based on [eufy-clean](https://github.com/martijnpoppen/eufy-clean) by [martijnpoppen](https://github.com/martijnpoppen), rewritten in Python with Home Assistant support.
+Forked from [martijnpoppen/eufy-clean](https://github.com/martijnpoppen/eufy-clean) and rewritten in Python with Home Assistant support.
 
 ## Features
 
-- Cloud login and device pairing via Eufy API
+- Cloud login and device pairing via the Eufy API
 - Real-time vacuum control over MQTT
-- Home Assistant config flow integration
+- Home Assistant config flow for easy setup
 - Scene cleaning and room-specific cleaning
 - Battery level sensor (useful for off-peak charging schedules)
-- Standalone Python usage without Home Assistant
+- Standalone Python usage — no Home Assistant required
 
 ## Requirements
 
 - Python 3.12+
 - An MQTT-enabled Eufy vacuum (e.g. Robovac X10 Pro Omni)
-- Home Assistant (optional — can be used standalone)
+- Home Assistant (optional — the library works standalone)
 
 ## Installation
 
 ### Home Assistant (HACS)
 
-1. Add this repository to [HACS](https://hacs.xyz/) as a custom integration
-2. Install **Eufy Robovac MQTT**
-3. Restart Home Assistant
-4. Go to **Settings > Devices & Services > Add Integration** and search for "Eufy Robovac MQTT"
-5. Log in with your Eufy app credentials
+1. Add this repository to [HACS](https://hacs.xyz/) as a custom integration.
+2. Install **Eufy Robovac MQTT**.
+3. Restart Home Assistant.
+4. Go to **Settings > Devices & Services > Add Integration** and search for "Eufy Robovac MQTT".
+5. Log in with your Eufy app credentials.
 
-### Standalone
+### Standalone Python
 
 ```bash
 git clone https://github.com/mvrph/eufy-clean.git
 cd eufy-clean
-pip install -r requirements.txt
+pip install -r requirements-standalone.txt
 ```
+
+For standalone usage you only need the lightweight dependencies listed in `requirements-standalone.txt`. The full `requirements.txt` includes Home Assistant and is only needed for integration development.
 
 ## Usage
 
 ### Home Assistant Services
 
-**Scene cleaning:**
+#### Scene Cleaning
 
 ```yaml
 action: vacuum.send_command
@@ -53,9 +55,16 @@ target:
   entity_id: vacuum.robovac_x10_pro_omni
 ```
 
-Scene numbers: 1 = full home daily, 2 = full home deep, 3 = post-meal. Custom scenes start at 4, incrementing in the order you created them in the app.
+**Scene numbers:**
 
-**Room cleaning:**
+| Scene | Description |
+|-------|-------------|
+| 1     | Full home daily clean |
+| 2     | Full home deep clean |
+| 3     | Post-meal clean |
+| 4+    | Custom scenes, in the order you created them in the Eufy app |
+
+#### Room Cleaning
 
 ```yaml
 action: vacuum.send_command
@@ -70,12 +79,27 @@ target:
   entity_id: vacuum.robovac_x10_pro_omni
 ```
 
-Room IDs are assigned by the mapping order — starting from the room left of the base station and incrementing. The base station room is last. You can verify IDs by testing `vacuum.room_clean` and checking the app.
+Room IDs are assigned by mapping order — starting from the room left of the base station and incrementing. The base station room is last. You can verify IDs by testing `vacuum.room_clean` and checking the Eufy app.
 
 > [!TIP]
-> If you get "Unable to identify position", it's likely because you've had multiple maps and your default `map_id` is higher than expected. Try incrementing — 20 is not an unusual number.
+> If you get "Unable to identify position", your default `map_id` is likely higher than expected (this happens when you've had multiple maps). Try incrementing — 20 is not an unusual number.
+
+#### Battery Sensor
+
+The integration exposes a battery charge sensor in Home Assistant, useful for tracking charge level and scheduling off-peak charging.
+
+![Battery sensor in Home Assistant](assets/eufy-battery.png)
 
 ### Standalone Python
+
+Set your Eufy credentials in a `.env` file:
+
+```
+EUFY_USERNAME=your-email@example.com
+EUFY_PASSWORD=your-password
+```
+
+Then use the library directly:
 
 ```python
 import asyncio
@@ -107,11 +131,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### Battery Sensor
-
-The integration exposes a battery charge sensor in Home Assistant, useful for tracking charge level and scheduling off-peak charging.
-
-![Battery sensor in Home Assistant](assets/eufy-battery.png)
+See `standalone_example.py` for a more detailed example with error handling.
 
 ## Project Structure
 
@@ -131,13 +151,15 @@ eufy-clean/
 │       ├── utils.py            # Utility functions
 │       └── vacuum.py           # HA vacuum entity
 ├── example.py                  # Standalone usage example
-├── docker-compose.yml
+├── standalone_example.py       # Detailed standalone example
+├── requirements.txt            # Full deps (includes Home Assistant)
+├── requirements-standalone.txt # Lightweight standalone deps
 ├── pyproject.toml
-├── requirements.txt
+├── docker-compose.yml
 └── hacs.json
 ```
 
-## TODO
+## Roadmap
 
 - [ ] Clean rooms with custom cleaning mode
 - [ ] Track consumables (water, dustbin, filter)
@@ -152,4 +174,4 @@ See [LICENSE.md](LICENSE.md).
 
 ## Credits
 
-Forked from [martijnpoppen/eufy-clean](https://github.com/martijnpoppen/eufy-clean). Rewritten in Python with Home Assistant integration.
+Originally forked from [martijnpoppen/eufy-clean](https://github.com/martijnpoppen/eufy-clean). Rewritten in Python with Home Assistant integration.
