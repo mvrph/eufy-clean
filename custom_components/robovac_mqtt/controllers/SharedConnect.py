@@ -1,3 +1,9 @@
+"""Shared device command interface.
+
+Contains the high-level vacuum commands (clean, pause, go home, room clean,
+scene clean, etc.) and data query methods (battery, status, speed). This
+class is the common base for both HA-integrated and standalone device control.
+"""
 import asyncio
 import logging
 from typing import Any, Callable

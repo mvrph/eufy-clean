@@ -1,3 +1,13 @@
+"""MQTT transport layer for Eufy device communication.
+
+Handles TLS-authenticated MQTT connections to Eufy's broker, message
+publishing/subscribing, and bridging sync MQTT callbacks to the async
+event loop.
+
+MQTT topics:
+  - Subscribe: cmd/eufy_home/{model}/{id}/res  (device responses)
+  - Publish:   cmd/eufy_home/{model}/{id}/req  (device commands)
+"""
 import asyncio
 import json
 import logging

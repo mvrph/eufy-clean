@@ -1,3 +1,8 @@
+"""Eufy device model registry.
+
+Maps model codes (e.g. T2351) to human-readable names and groups models
+into product-line series (X, G, L, C, S).
+"""
 EUFY_CLEAN_DEVICES = {
    'T1250': 'RoboVac 35C',
    'T2103': 'RoboVac 11C',

@@ -1,3 +1,8 @@
+"""High-level entry point for Eufy vacuum control.
+
+EufyClean wraps authentication and device initialization into a simple API
+suitable for both Home Assistant integration and standalone Python usage.
+"""
 import random
 import string
 from typing import Any

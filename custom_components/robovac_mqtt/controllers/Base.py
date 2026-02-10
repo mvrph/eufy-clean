@@ -1,3 +1,6 @@
+"""Abstract base controller defining the DPS key mapping for Eufy devices."""
+
+
 class Base:
     def __init__(self):
         self.dps_map = {

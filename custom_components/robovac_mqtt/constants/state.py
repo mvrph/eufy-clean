@@ -1,3 +1,4 @@
+"""Vacuum state, speed, mode, control, and error code enumerations."""
 from enum import Enum
 
 

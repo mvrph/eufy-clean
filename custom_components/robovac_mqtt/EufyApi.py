@@ -1,3 +1,8 @@
+"""Eufy cloud REST API client.
+
+Handles authentication, device discovery, and MQTT credential retrieval
+via Eufy's cloud endpoints.
+"""
 import hashlib
 import logging
 from typing import Any

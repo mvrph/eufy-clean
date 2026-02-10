@@ -22,9 +22,9 @@ args = "Run standalone example"
 name = "Run standalone example"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd /home/runner/workspace && python standalone_example.py"
-
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd /home/runner/workspace && python examples/standalone_example.py"

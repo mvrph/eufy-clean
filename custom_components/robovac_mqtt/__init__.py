@@ -1,3 +1,9 @@
+"""Eufy Robovac MQTT integration for Home Assistant.
+
+When running under Home Assistant, this module registers the vacuum and button
+platforms and manages device lifecycle. In standalone mode the HA-specific
+setup functions are skipped and only the core library (EufyClean) is available.
+"""
 import logging
 
 # Home Assistant imports - only needed for HA integration

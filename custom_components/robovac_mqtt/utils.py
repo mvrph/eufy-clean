@@ -1,3 +1,8 @@
+"""Protobuf encoding/decoding utilities.
+
+Provides helpers for converting between Python dicts, protobuf messages,
+and the base64-encoded strings used in MQTT payloads.
+"""
 import asyncio
 from base64 import b64decode, b64encode
 from typing import Any, Type, TypeVar

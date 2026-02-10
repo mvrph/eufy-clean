@@ -1,3 +1,8 @@
+"""Authentication controller.
+
+Manages Eufy cloud login, MQTT credential retrieval, and device list
+resolution (matching cloud device records with MQTT-connected devices).
+"""
 from ..controllers.Base import Base
 from ..EufyApi import EufyApi
 
