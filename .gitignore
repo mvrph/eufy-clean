@@ -9,6 +9,17 @@ node_modules
 *.pem
 *.key
 # proto/cloud/*.py
-**/__pycache__
 *.env
 config/
+
+# Python
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+*.egg
+.eggs/
+*.so
+.venv/
+venv/
+__pycache__/
