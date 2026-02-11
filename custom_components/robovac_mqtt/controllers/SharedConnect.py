@@ -71,15 +71,15 @@ class SharedConnect(Base):
             except Exception as error:
                 _LOGGER.error(error)
 
-    def add_listener(self, listener: Callable[[], None]):
-        """Fixed: Changed type annotation to match actual usage"""
+    def add_listener(self, listener: Callable[[], None]) -> None:
+        """Register a callback invoked whenever device data is updated."""
         self._update_listeners.append(listener)
 
-    async def get_robovac_data(self):
+    async def get_robovac_data(self) -> dict[str, Any]:
         return self.robovac_data
 
-    async def get_clean_speed(self):
-        """Fixed: Better handling of different data types for clean speed"""
+    async def get_clean_speed(self) -> str:
+        """Return the current clean speed as a lowercase string."""
         clean_speed_raw = self.robovac_data.get('CLEAN_SPEED')
         
         if clean_speed_raw is None:
@@ -116,7 +116,7 @@ class SharedConnect(Base):
     async def get_control_response(self) -> ModeCtrlResponse | None:
         try:
             value = decode(ModeCtrlResponse, self.robovac_data['PLAY_PAUSE'])
-            print('152 - control response', value)
+            _LOGGER.debug('152 - control response: %s', value)
             return value or ModeCtrlResponse()
         except Exception as error:
             _LOGGER.error(error, exc_info=error)
@@ -138,20 +138,16 @@ class SharedConnect(Base):
             return 'auto'
 
     async def get_work_status(self) -> str:
+        """Map the protobuf WorkStatus.state integer to a VacuumActivity value.
+
+        State values (from work_status.proto):
+            0 = STANDBY, 1 = SLEEP, 2 = FAULT, 3 = CHARGING,
+            4 = FAST_MAPPING, 5 = CLEANING, 6 = REMOTE_CTRL,
+            7 = GO_HOME, 8 = CRUISING
+        """
         try:
             value = decode(WorkStatus, self.robovac_data['WORK_STATUS'])
 
-            """
-                STANDBY = 0
-                SLEEP = 1
-                FAULT = 2
-                CHARGING = 3
-                FAST_MAPPING = 4
-                CLEANING = 5
-                REMOTE_CTRL = 6
-                GO_HOME = 7
-                CRUISIING = 8
-            """
             match value.state:
                 case 0:
                     return VacuumActivity.IDLE
@@ -207,10 +203,10 @@ class SharedConnect(Base):
     async def get_find_robot(self) -> bool:
         return bool(self.robovac_data['FIND_ROBOT'])
 
-    async def get_battery_level(self):
+    async def get_battery_level(self) -> int:
         return int(self.robovac_data['BATTERY_LEVEL'])
 
-    async def get_error_code(self):
+    async def get_error_code(self) -> int | None:
         try:
             value = decode(ErrorCode, self.robovac_data['ERROR_CODE'])
             if value.get('warn'):
@@ -227,48 +223,49 @@ class SharedConnect(Base):
         except Exception as error:
             _LOGGER.error(error)
 
-    async def auto_clean(self):
+    async def auto_clean(self) -> None:
         value = encode(ModeCtrlRequest, {'auto_clean': {'clean_times': 1}})
         return await self.send_command({self.dps_map['PLAY_PAUSE']: value})
 
-    async def scene_clean(self, id: int):
+    async def scene_clean(self, id: int) -> None:
+        # The Eufy API offsets scene IDs by 3 (scenes 1-3 are built-in presets)
         increment = 3
         value = encode(ModeCtrlRequest, {'method': EUFY_CLEAN_CONTROL.START_SCENE_CLEAN, 'scene_clean': {'scene_id': id + increment}})
         return await self.send_command({self.dps_map['PLAY_PAUSE']: value})
 
-    async def play(self):
+    async def play(self) -> None:
         value = encode(ModeCtrlRequest, {'method': EUFY_CLEAN_CONTROL.RESUME_TASK})
         return await self.send_command({self.dps_map['PLAY_PAUSE']: value})
 
-    async def pause(self):
+    async def pause(self) -> None:
         value = encode(ModeCtrlRequest, {'method': EUFY_CLEAN_CONTROL.PAUSE_TASK})
         return await self.send_command({self.dps_map['PLAY_PAUSE']: value})
 
-    async def stop(self):
+    async def stop(self) -> None:
         value = encode(ModeCtrlRequest, {'method': EUFY_CLEAN_CONTROL.STOP_TASK})
         return await self.send_command({self.dps_map['PLAY_PAUSE']: value})
 
-    async def go_home(self):
+    async def go_home(self) -> None:
         value = encode(ModeCtrlRequest, {'method': EUFY_CLEAN_CONTROL.START_GOHOME})
         return await self.send_command({self.dps_map['PLAY_PAUSE']: value})
 
-    async def go_dry(self):
+    async def go_dry(self) -> None:
         value = encode(StationRequest, {'manual_cmd': {'go_dry': True}})
         return await self.send_command({self.dps_map['GO_HOME']: value})
 
-    async def go_selfcleaning(self):
+    async def go_selfcleaning(self) -> None:
         value = encode(StationRequest, {'manual_cmd': {'go_selfcleaning': True}})
         return await self.send_command({self.dps_map['GO_HOME']: value})
 
-    async def collect_dust(self):
+    async def collect_dust(self) -> None:
         value = encode(StationRequest, {'manual_cmd': {'go_collect_dust': True}})
         return await self.send_command({self.dps_map['GO_HOME']: value})
 
-    async def spot_clean(self):
+    async def spot_clean(self) -> None:
         value = encode(ModeCtrlRequest, {'method': EUFY_CLEAN_CONTROL.START_SPOT_CLEAN})
         return await self.send_command({self.dps_map['PLAY_PAUSE']: value})
 
-    async def room_clean(self, room_ids: list[int], map_id: int = 3):
+    async def room_clean(self, room_ids: list[int], map_id: int = 3) -> None:
         _LOGGER.debug(f'Room clean: {room_ids}, map_id: {map_id}')
         rooms_clean = SelectRoomsClean(
             rooms=[SelectRoomsClean.Room(id=id, order=i + 1) for i, id in enumerate(room_ids)],
@@ -315,7 +312,7 @@ class SharedConnect(Base):
                 'clean_times': 1
             }
         }
-        print('setCleanParam - requestParams', request_params)
+        _LOGGER.debug('setCleanParam - requestParams: %s', request_params)
         value = encode(CleanParamRequest, request_params)
         await self.send_command({self.dps_map['CLEANING_PARAMETERS']: value})
 

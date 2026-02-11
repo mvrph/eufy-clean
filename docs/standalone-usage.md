@@ -3,7 +3,7 @@
 ## ✅ Yes, You Can Use This Library Standalone!
 
 The core device communication code **does NOT require Home Assistant**. The library is designed to work both:
-- ✅ **Standalone** - Direct Python usage (as shown in `example.py`)
+- ✅ **Standalone** - Direct Python usage (as shown in `examples/example.py`)
 - ✅ **Home Assistant Integration** - Via the custom component
 
 ---
@@ -249,7 +249,12 @@ eufy-clean/
 │   │   ├── SharedConnect.py      ← ✅ Core (standalone)
 │   │   └── Login.py              ← ✅ Core (standalone)
 │   └── proto/                    ← ✅ Core (standalone)
-├── example.py                     ← ✅ Standalone example
+├── examples/
+│   ├── standalone_example.py      ← ✅ Full standalone example
+│   ├── example.py                 ← ✅ Minimal example
+│   ├── query_device_info.py       ← ✅ DPS key discovery
+│   └── ready_to_use.py            ← ✅ Dependency checker
+├── requirements-standalone.txt   ← Lightweight standalone deps
 └── requirements.txt              ← Includes HA (for HA users)
 ```
 
@@ -297,7 +302,7 @@ pip install aiohttp paho-mqtt protobuf python-dotenv
 - ✅ No MQTT broker setup needed (uses Eufy's broker)
 - ✅ No special network configuration
 - ✅ Just install core dependencies and use `EufyClean` class
-- ✅ Works exactly like `example.py` shows
+- ✅ Works exactly like `examples/example.py` shows
 
 The library connects directly to Eufy's cloud services and MQTT broker, just like the official app does. You only need:
 1. Python 3.12+

@@ -5,7 +5,7 @@ dynamic_requires = []
 setup(
     name="robovac_mqtt",
     version="1.0",
-    url="http://github.com/jeppesens/eufy-clean",
+    url="https://github.com/mvrph/eufy-clean",
     packages=find_packages(),
     scripts=[],
     description="Python API for controlling Eufy Robovac X10 Pro Omni",

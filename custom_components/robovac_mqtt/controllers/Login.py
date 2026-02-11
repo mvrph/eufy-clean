@@ -3,10 +3,15 @@
 Manages Eufy cloud login, MQTT credential retrieval, and device list
 resolution (matching cloud device records with MQTT-connected devices).
 """
+from typing import Any
+
 from ..controllers.Base import Base
 from ..EufyApi import EufyApi
 
 
+# TODO: Normalize camelCase method names to snake_case for PEP 8 consistency.
+#       Deferred to avoid breaking callers in a single pass — affects:
+#       getDevices, getMqttDevice, checkLogin, checkApiType, findModel
 class EufyLogin(Base):
     def __init__(self, username: str, password: str, openudid: str):
         super().__init__()
@@ -18,11 +23,11 @@ class EufyLogin(Base):
         self.mqtt_devices = []
         self.eufy_api_devices = []
 
-    async def init(self):
+    async def init(self) -> None:
         await self.login({'mqtt': True})
         return await self.getDevices()
 
-    async def login(self, config: dict):
+    async def login(self, config: dict) -> None:
         eufyLogin = None
 
         if not config['mqtt']:
@@ -41,7 +46,7 @@ class EufyLogin(Base):
 
         self.mqtt_credentials = eufyLogin['mqtt']
 
-    async def checkLogin(self):
+    async def checkLogin(self) -> None:
         if not self.sid:
             await self.login({'mqtt': True})
 
@@ -59,15 +64,16 @@ class EufyLogin(Base):
         ]
         self.mqtt_devices = [d for d in devices if not d['invalid']]
 
-    async def getMqttDevice(self, deviceId: str):
+    async def getMqttDevice(self, deviceId: str) -> list[dict[str, Any]] | dict[str, Any] | None:
         return await self.eufyApi.get_device_list(deviceId)
 
-    def checkApiType(self, dps: dict):
+    def checkApiType(self, dps: dict) -> str:
+        """Return 'novel' if DPS keys match the expected map, else 'legacy'."""
         if any(k in dps for k in self.dps_map.values()):
             return 'novel'
         return 'legacy'
 
-    def findModel(self, deviceId: str):
+    def findModel(self, deviceId: str) -> dict[str, Any]:
         device = next((d for d in self.eufy_api_devices if d['id'] == deviceId), None)
 
         if device:

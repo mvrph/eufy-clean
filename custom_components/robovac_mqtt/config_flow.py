@@ -1,3 +1,8 @@
+"""Home Assistant config flow for Eufy Robovac MQTT.
+
+Presents a login form during integration setup, validates Eufy credentials
+against the cloud API, and creates a config entry on success.
+"""
 import logging
 import random
 import string

@@ -12,9 +12,7 @@ from .controllers.MqttConnect import MqttConnect
 
 
 class EufyClean:
-    def __init__(self, username: str, password: str):
-        print('EufyClean constructor')
-
+    def __init__(self, username: str, password: str) -> None:
         self.username = username
         self.password = password
         self.openudid = ''.join(random.choices(string.hexdigits, k=32))
@@ -25,7 +23,7 @@ class EufyClean:
 
         return self.eufyCleanApi.mqtt_devices
 
-    async def get_devices(self):
+    async def get_devices(self) -> list[dict[str, Any]]:
         return self.eufyCleanApi.mqtt_devices
 
     async def init_device(self, device_id: str) -> MqttConnect:
@@ -40,5 +38,5 @@ class EufyClean:
 
         return MqttConnect(device, self.openudid, self.eufyCleanApi)
 
-    async def get_user_info(self):
+    async def get_user_info(self) -> dict[str, Any] | None:
         return await self.eufyCleanApi.eufyApi.get_user_info()

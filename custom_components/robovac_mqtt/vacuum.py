@@ -1,3 +1,9 @@
+"""Home Assistant vacuum entity for Eufy Robovac devices.
+
+Exposes a StateVacuumEntity that maps MQTT device data to HA vacuum states
+and forwards HA service calls (start, pause, stop, return home, send_command)
+to the underlying MqttConnect controller.
+"""
 import logging
 from typing import Literal
 

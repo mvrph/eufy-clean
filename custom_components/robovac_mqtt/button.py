@@ -1,3 +1,8 @@
+"""Home Assistant button entities for Eufy Robovac station commands.
+
+Provides buttons for dry mop, wash mop, and empty dust bin — station-level
+actions that are not part of the standard vacuum entity interface.
+"""
 import logging
 
 from homeassistant.components.button import ButtonEntity

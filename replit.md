@@ -34,5 +34,6 @@ In this Replit environment, it runs in **standalone mode** (without Home Assista
 Set environment variables `EUFY_USERNAME` and `EUFY_PASSWORD`, then run `examples/standalone_example.py`.
 
 ## Recent Changes
+- 2026-02-11: Code quality pass — added module docstrings to vacuum.py/button.py/config_flow.py, replaced bare print() with _LOGGER, added return type hints across core modules, added TODO for camelCase→snake_case rename in Login.py. Updated docs/ and copilot-instructions for moved file paths. Fixed setup.py repo URL.
 - 2026-02-10: Reorganized repo layout — moved docs into `docs/`, scripts into `scripts/`, examples into `examples/`. Added module docstrings and `__init__.py` files. Removed duplicate requirements. Updated README with architecture overview.
 - 2026-02-10: Initial Replit setup. Removed `homeassistant` dependency, added `aiohttp` for standalone usage.

@@ -58,6 +58,9 @@ poetry run python example.py
 
 # For Home Assistant development, use Docker:
 docker-compose up -d
+
+# Or use the ready-to-use checker:
+python examples/ready_to_use.py
 ```
 
 ### Working with the Code
@@ -93,7 +96,7 @@ docker-compose up -d
 ### Testing
 
 When making changes:
-1. Test functionality with the example.py script first
+1. Test functionality with the `examples/example.py` script first
 2. For Home Assistant integration changes, test using the Docker setup
 3. Verify MQTT communication is working correctly
 
@@ -101,7 +104,7 @@ When making changes:
 
 1. **MQTT Connection Issues**: Check certificates, network connectivity
 2. **Authentication Failures**: Verify credentials, check for API changes
-3. **Room/Scene IDs**: These are numerically identified; refer to README.md and example.py for guidance
+3. **Room/Scene IDs**: These are numerically identified; refer to README.md and `examples/example.py` for guidance
 
 ## Special Considerations
 
