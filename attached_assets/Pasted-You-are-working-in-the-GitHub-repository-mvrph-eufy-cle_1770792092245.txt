@@ -1,0 +1,51 @@
+You are working in the GitHub repository mvrph/eufy-clean, which contains a Home Assistant custom
+integration for controlling Eufy vacuums over MQTT (Robovac X10 Pro Omni).
+
+Goal:
+- Clean up and reorganize the top-level README for this project.
+- Improve clarity, structure, and consistency.
+- Do NOT make any logic or behavioral code changes — documentation-only.
+
+Constraints:
+- Do not modify Python, YAML, or Home Assistant integration logic.
+- You may only edit documentation files (README, TODO, docs/*) and non-code assets if needed.
+- Preserve all existing features and configuration semantics; do not rename services, fields, or options.
+- Keep examples accurate relative to the current code.
+
+README requirements:
+- Keep the README focused on:
+  - What the integration is and which devices it targets.
+  - Installation paths: HACS (Home Assistant) and standalone Python usage.
+  - Configuration and common usage examples (scene cleaning, room cleaning, battery sensor).
+  - Project structure and where to look in the code.
+  - Roadmap / TODO and credits.
+- Reorganize sections for readability following a template similar in spirit to my default_skeleton
+  repositories:
+  1. Title + one-paragraph overview
+  2. Features
+  3. Installation (HACS + standalone)
+  4. Configuration / Usage (Home Assistant services, scenes, rooms, tips)
+  5. Development notes (project structure)
+  6. Roadmap / TODO
+  7. License and Credits
+- Use clear section headings (##, ###) and consistent markdown style.
+- Keep all existing information, but you may:
+  - Rewrite sentences for clarity.
+  - Move content between sections.
+  - Add short context where something is unclear.
+
+Steps:
+1. Open the current README in this repo and read it fully.
+2. Open the default_skeleton repository README on GitHub just to understand the general style and
+   section ordering I like. Use that as inspiration for structure and tone, not as a strict template.
+3. Draft an improved README in-place for eufy-clean that:
+   - Keeps all technical details and examples correct.
+   - Improves organization and flow.
+   - Uses concise, friendly language.
+4. When you are done, ensure:
+   - There are no code/logic changes in the repo (documentation-only diff).
+   - The README still accurately describes the services, parameters, and project layout.
+
+Finally:
+- Summarize the changes you made to the README in a short list in your response.
+- Confirm explicitly that you did not modify any logic or behavior in the code.
