@@ -1,23 +1,16 @@
 # Eufy Clean
 
-Home Assistant custom integration for controlling Eufy robot vacuums over MQTT. Built for the **Robovac X10 Pro Omni**, but compatible with other MQTT-enabled Eufy vacuums. Can also be used as a standalone Python library without Home Assistant.
-
-Forked from [martijnpoppen/eufy-clean](https://github.com/martijnpoppen/eufy-clean) and rewritten in Python with Home Assistant support.
+A Home Assistant custom integration for controlling Eufy robot vacuums over MQTT. Built for the **Robovac X10 Pro Omni**, but compatible with other MQTT-enabled Eufy vacuums. The core library also works as a standalone Python package — no Home Assistant required.
 
 ## Features
 
-- Cloud login and device pairing via the Eufy API
-- Real-time vacuum control over MQTT
-- Home Assistant config flow for easy setup
-- Scene cleaning and room-specific cleaning
-- Battery level sensor (useful for off-peak charging schedules)
-- Standalone Python usage — no Home Assistant required
-
-## Requirements
-
-- Python 3.12+
-- An MQTT-enabled Eufy vacuum (e.g. Robovac X10 Pro Omni)
-- Home Assistant (optional — the library works standalone)
+- Cloud authentication and automatic device discovery via the Eufy API
+- Real-time vacuum control over MQTT (TLS, port 8883)
+- Home Assistant config flow for guided setup
+- Scene cleaning (daily, deep, post-meal, custom)
+- Room-specific cleaning with map and room ID support
+- Battery level sensor for charge tracking and off-peak scheduling
+- Standalone Python library — use it in your own scripts without Home Assistant
 
 ## Installation
 
@@ -27,7 +20,7 @@ Forked from [martijnpoppen/eufy-clean](https://github.com/martijnpoppen/eufy-cle
 2. Install **Eufy Robovac MQTT**.
 3. Restart Home Assistant.
 4. Go to **Settings > Devices & Services > Add Integration** and search for "Eufy Robovac MQTT".
-5. Log in with your Eufy app credentials.
+5. Enter your Eufy app credentials when prompted.
 
 ### Standalone Python
 
@@ -37,7 +30,9 @@ cd eufy-clean
 pip install -r requirements-standalone.txt
 ```
 
-For standalone usage you only need the lightweight dependencies listed in `requirements-standalone.txt`. The full `requirements.txt` includes Home Assistant and is only needed for integration development.
+Standalone usage only requires the lightweight dependencies in `requirements-standalone.txt` (aiohttp, paho-mqtt, protobuf, python-dotenv). The full `requirements.txt` includes Home Assistant and is intended for integration development.
+
+**Requirements:** Python 3.12+ and an MQTT-enabled Eufy vacuum (e.g. Robovac X10 Pro Omni).
 
 ## Usage
 
@@ -54,8 +49,6 @@ data:
 target:
   entity_id: vacuum.robovac_x10_pro_omni
 ```
-
-**Scene numbers:**
 
 | Scene | Description |
 |-------|-------------|
@@ -79,20 +72,20 @@ target:
   entity_id: vacuum.robovac_x10_pro_omni
 ```
 
-Room IDs are assigned by mapping order — starting from the room left of the base station and incrementing. The base station room is last. You can verify IDs by testing `vacuum.room_clean` and checking the Eufy app.
+Room IDs are assigned by mapping order — starting from the room left of the base station and incrementing. The base station room is last. You can verify IDs by calling `vacuum.room_clean` and checking the Eufy app to see which room starts.
 
 > [!TIP]
-> If you get "Unable to identify position", your default `map_id` is likely higher than expected (this happens when you've had multiple maps). Try incrementing — 20 is not an unusual number.
+> If you get "Unable to identify position", your `map_id` is likely higher than expected. This happens when you've had multiple saved maps. Try incrementing — values around 20 are not unusual.
 
 #### Battery Sensor
 
-The integration exposes a battery charge sensor in Home Assistant, useful for tracking charge level and scheduling off-peak charging.
+The integration exposes a battery charge sensor, useful for tracking charge level and scheduling off-peak charging automations.
 
 ![Battery sensor in Home Assistant](assets/eufy-battery.png)
 
 ### Standalone Python
 
-Set your Eufy credentials in a `.env` file:
+Create a `.env` file with your Eufy credentials:
 
 ```
 EUFY_USERNAME=your-email@example.com
@@ -131,9 +124,11 @@ async def main():
 asyncio.run(main())
 ```
 
-See [`examples/standalone_example.py`](examples/standalone_example.py) for a more detailed example with error handling, and [`docs/standalone-usage.md`](docs/standalone-usage.md) for the full standalone guide.
+See [`examples/standalone_example.py`](examples/standalone_example.py) for a fuller example with error handling, and [`docs/standalone-usage.md`](docs/standalone-usage.md) for the complete standalone guide.
 
-## Project Structure
+## Development
+
+### Project Structure
 
 ```
 eufy-clean/
@@ -174,7 +169,7 @@ eufy-clean/
 └── LICENSE.md
 ```
 
-### Architecture overview
+### Architecture
 
 ```
 ┌────────────────────────────────────┐
@@ -199,11 +194,11 @@ eufy-clean/
 └────────────────────────────────────┘
 ```
 
-### Key concepts
+### Key Concepts
 
-- **DPS (Data Point Service)**: Tuya-based protocol mapping data to numbered keys (e.g. `163` = battery level). See `controllers/Base.py` for the full map.
-- **MQTT topics**: Commands go to `cmd/eufy_home/{model}/{id}/req`, responses arrive on `cmd/eufy_home/{model}/{id}/res`. See `controllers/MqttConnect.py`.
-- **Protobuf**: Commands and responses are protobuf-encoded, base64-wrapped, and sent as JSON payloads. Definitions live in `proto/cloud/`.
+- **DPS (Data Point Service):** Tuya-based protocol mapping data to numbered keys (e.g. key `163` = battery level). See `controllers/Base.py` for the full map.
+- **MQTT topics:** Commands go to `cmd/eufy_home/{model}/{id}/req`, responses arrive on `cmd/eufy_home/{model}/{id}/res`. See `controllers/MqttConnect.py`.
+- **Protobuf:** Commands and responses are protobuf-encoded, base64-wrapped, and sent as JSON payloads. Definitions live in `proto/cloud/`.
 
 For a deep dive into the protocol and data points, see [`docs/device-query-protocol.md`](docs/device-query-protocol.md).
 
@@ -213,13 +208,11 @@ For a deep dive into the protocol and data points, see [`docs/device-query-proto
 - [ ] Track consumables (water, dustbin, filter)
 - [ ] Error tracking and reporting
 - [ ] Map management
-- [ ] Device location / current position
+- [ ] Device location and current position
 - [ ] Support for additional Eufy models
 
-## License
+## License & Credits
 
-See [LICENSE.md](LICENSE.md).
+Licensed under the terms in [LICENSE.md](LICENSE.md).
 
-## Credits
-
-Originally forked from [martijnpoppen/eufy-clean](https://github.com/martijnpoppen/eufy-clean). Rewritten in Python with Home Assistant integration.
+Originally forked from [martijnpoppen/eufy-clean](https://github.com/martijnpoppen/eufy-clean) and rewritten in Python with Home Assistant integration support.
