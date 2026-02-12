@@ -1,7 +1,5 @@
 from setuptools import find_packages, setup
 
-dynamic_requires = []
-
 setup(
     name="robovac_mqtt",
     version="1.0",

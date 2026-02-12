@@ -4,9 +4,6 @@ import logging
 import time
 from functools import partial
 from os import path
-from threading import Thread
-
-from google.protobuf.message import Message
 from paho.mqtt import client as mqtt
 
 from ..controllers.Login import EufyLogin
@@ -108,7 +105,7 @@ class MqttConnect(SharedConnect):
         _LOGGER.info(f"Subscribe to cmd/eufy_home/{self.deviceModel}/{self.deviceId}/res")
         self.mqttClient.subscribe(f"cmd/eufy_home/{self.deviceModel}/{self.deviceId}/res")
 
-    def on_message(self, client, userdata, msg: Message):
+    def on_message(self, client, userdata, msg):
         """Fixed: Properly handle async message processing from sync callback"""
         messageParsed = json.loads(msg.payload.decode())
         _LOGGER.debug(f"Received message on {msg.topic}: ", messageParsed)

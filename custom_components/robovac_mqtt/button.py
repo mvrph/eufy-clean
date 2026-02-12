@@ -3,8 +3,6 @@ import logging
 from homeassistant.components.button import ButtonEntity
 from homeassistant.helpers.entity import DeviceInfo
 from .constants.hass import DOMAIN, DEVICES
-from .EufyClean import EufyClean
-
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, config_entry, async_add_entities):

@@ -46,10 +46,7 @@ try:
         await hass.config_entries.async_reload(entry.entry_id)
 
 except ImportError:
-    # Standalone mode - Home Assistant not available
-    # These functions won't be available, but core library still works
     _LOGGER = logging.getLogger(__name__)
-    pass
 
 # Core library imports - always available
 from .EufyClean import EufyClean
