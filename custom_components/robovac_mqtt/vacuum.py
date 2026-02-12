@@ -12,7 +12,6 @@ from .constants.hass import DEVICES, DOMAIN, VACS
 from .constants.state import (EUFY_CLEAN_CLEAN_SPEED,
                               EUFY_CLEAN_NOVEL_CLEAN_SPEED)
 from .controllers.MqttConnect import MqttConnect
-from .EufyClean import EufyClean
 
 _LOGGER = logging.getLogger(__name__)
 

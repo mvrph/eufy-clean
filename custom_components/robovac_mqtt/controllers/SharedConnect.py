@@ -23,7 +23,7 @@ from ..proto.cloud.clean_param_pb2 import (CleanExtent, CleanParamRequest,
                                            MopMode)
 from ..proto.cloud.control_pb2 import (ModeCtrlRequest, ModeCtrlResponse,
                                        SelectRoomsClean)
-from ..proto.cloud.station_pb2 import (StationRequest, ManualActionCmd)
+from ..proto.cloud.station_pb2 import StationRequest
 from ..proto.cloud.error_code_pb2 import ErrorCode
 from ..proto.cloud.work_status_pb2 import WorkStatus
 from ..utils import decode, encode, encode_message
@@ -110,7 +110,7 @@ class SharedConnect(Base):
     async def get_control_response(self) -> ModeCtrlResponse | None:
         try:
             value = decode(ModeCtrlResponse, self.robovac_data['PLAY_PAUSE'])
-            print('152 - control response', value)
+            _LOGGER.debug('152 - control response: %s', value)
             return value or ModeCtrlResponse()
         except Exception as error:
             _LOGGER.error(error, exc_info=error)
@@ -309,7 +309,7 @@ class SharedConnect(Base):
                 'clean_times': 1
             }
         }
-        print('setCleanParam - requestParams', request_params)
+        _LOGGER.debug('setCleanParam - requestParams: %s', request_params)
         value = encode(CleanParamRequest, request_params)
         await self.send_command({self.dps_map['CLEANING_PARAMETERS']: value})
 

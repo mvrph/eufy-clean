@@ -18,8 +18,6 @@ class EufyLogin(Base):
         return await self.getDevices()
 
     async def login(self, config: dict):
-        eufyLogin = None
-
         if not config['mqtt']:
             raise Exception('MQTT login is required')
 
@@ -27,9 +25,6 @@ class EufyLogin(Base):
 
         if not eufyLogin:
             raise Exception('Login failed - Please check your username and password. Error: Incorrect email login or password.')
-
-        if not config['mqtt']:
-            raise Exception('MQTT login is required')
 
         if 'mqtt' not in eufyLogin:
             raise Exception('Login succeeded but MQTT credentials not available')
