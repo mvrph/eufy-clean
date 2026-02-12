@@ -14,8 +14,10 @@ paho-mqtt = "^2.1.0"
 dnspython = "^2.7.0"
 python-dotenv = "^1.0.1"
 setuptools = "^75.8.0"
-homeassistant = "^2025.1.4"
+aiohttp = "^3.9.0"
 
+[tool.poetry.extras]
+homeassistant = []
 
 [build-system]
 requires = ["poetry-core"]
